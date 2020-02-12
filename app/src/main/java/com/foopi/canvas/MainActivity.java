@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         green.setStrokeColor("#000000");
         green.setStrokeWidth(20);
         green.setHasControls(true);
+        green.setAngle(45);
         components.add(green);
 
         Rectangle red = new Rectangle();
