@@ -87,7 +87,6 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawColor(Color.GRAY);
 
         try {
             for (Component component : components) {
@@ -105,7 +104,7 @@ public class CanvasView extends View {
         if(event.getAction()== MotionEvent.ACTION_DOWN){
             for (int i = components.size() - 1; i >= 0; i--) {
                 Component component = components.get(i);
-                if (component.hasControls()) {
+                if (component.isVisible() && component.isControls()) {
                     boolean bounded = component.isBounded(onePartWidth, onePartHeight, x, y);
                     if (bounded) {
                         if (onComponentClickListener != null) {

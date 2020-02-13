@@ -8,8 +8,6 @@ import android.text.TextUtils;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.util.AffineTransformation;
 
@@ -17,10 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Rectangle extends Component {
-
-    GeometryFactory gf = new GeometryFactory();
-    AffineTransformation at = new AffineTransformation();
-    Path path = new Path();
 
     private float top;
     private float left;
@@ -31,9 +25,10 @@ public class Rectangle extends Component {
     private String strokeColor;
     private float strokeWidth = 2f;
 
-    private boolean hasControls = false;
     private float opacity = 1f;
     private double angle = 0;
+    private double scaleX = 1;
+    private double scaleY = 1;
 
     public float getTop() {
         return top;
@@ -91,14 +86,6 @@ public class Rectangle extends Component {
         this.strokeWidth = strokeWidth;
     }
 
-    public boolean isHasControls() {
-        return hasControls;
-    }
-
-    public void setHasControls(boolean hasControls) {
-        this.hasControls = hasControls;
-    }
-
     public float getOpacity() {
         return opacity;
     }
@@ -115,6 +102,22 @@ public class Rectangle extends Component {
         this.angle = angle;
     }
 
+    public double getScaleX() {
+        return scaleX;
+    }
+
+    public void setScaleX(double scaleX) {
+        this.scaleX = scaleX;
+    }
+
+    public double getScaleY() {
+        return scaleY;
+    }
+
+    public void setScaleY(double scaleY) {
+        this.scaleY = scaleY;
+    }
+
     public Rectangle() {
     }
 
@@ -129,7 +132,7 @@ public class Rectangle extends Component {
         strokeColor = param.optString("stroke");
         strokeWidth = (float) param.optDouble("strokeWidth", 1f);
 
-        hasControls = param.optBoolean("hasControls", false);
+        controls = param.optBoolean("controls", false);
     }
 
     private float actualLeft(double onePartWidth) {
@@ -143,11 +146,6 @@ public class Rectangle extends Component {
     }
     private float actualBottom(double onePartHeight) {
         return (float) ((top + height) * onePartHeight);
-    }
-
-    @Override
-    public boolean hasControls() {
-        return hasControls;
     }
 
     private Coordinate topLeftCoordinate = new Coordinate();
@@ -172,28 +170,13 @@ public class Rectangle extends Component {
 
         Polygon polygon = gf.createPolygon(coordinates);
 
-        if (angle != 0) {
-            at.setToRotation(angle * Math.PI / 180, actualLeft(onePartWidth), actualTop(onePartHeight));
-            polygon = (Polygon) at.transform(polygon);
-        }
+        AffineTransformation at = new AffineTransformation();
+        at.setToRotation(angle * Math.PI / 180, actualLeft(onePartWidth), actualTop(onePartHeight));
+        at.translate(-actualLeft(onePartWidth), -actualTop(onePartHeight));
+        at.scale(scaleX, scaleY);
+        at.translate(actualLeft(onePartWidth), actualTop(onePartHeight));
+        polygon = (Polygon) at.transform(polygon);
         return polygon;
-    }
-
-    @Override
-    public Path getPath(double onePartWidth, double onePartHeight) {
-        path.reset();
-        Geometry geometry = getGeometry(onePartWidth, onePartHeight);
-        Coordinate[] coordinates = geometry.getCoordinates();
-        for (int i = 0; i < coordinates.length; i++) {
-            Coordinate coordinate = coordinates[i];
-            if (i == 0) {
-                path.moveTo((float) coordinate.x, (float) coordinate.y);
-            }
-            else {
-                path.lineTo((float) coordinate.x, (float) coordinate.y);
-            }
-        }
-        return path;
     }
 
     @Override
@@ -212,12 +195,5 @@ public class Rectangle extends Component {
             paint.setAlpha(255);
             canvas.drawPath(path, paint);
         }
-    }
-
-    @Override
-    public boolean isBounded(double onePartWidth, double onePartHeight, float x, float y) {
-        Geometry geometry = getGeometry(onePartWidth, onePartHeight);
-        Point point = gf.createPoint(new Coordinate(x, y));
-        return geometry.contains(point);
     }
 }
