@@ -4,20 +4,40 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import androidx.annotation.NonNull;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.util.AffineTransformation;
 
-public abstract class Component {
+public abstract class Component implements Cloneable {
 
     protected GeometryFactory gf = new GeometryFactory();
     protected AffineTransformation at = new AffineTransformation();
     protected Path path = new Path();
     protected boolean controls = false;
 
+    protected float left;
+    protected float top;
     private boolean visible = true;
+
+    public float getLeft() {
+        return left;
+    }
+
+    public void setLeft(float left) {
+        this.left = left;
+    }
+
+    public float getTop() {
+        return top;
+    }
+
+    public void setTop(float top) {
+        this.top = top;
+    }
 
     public boolean isVisible() {
         return visible;
@@ -36,6 +56,13 @@ public abstract class Component {
     }
 
     public abstract Geometry getGeometry(double onePartWidth, double onePartHeight);
+
+    protected float actualLeft(double onePartWidth) {
+        return (float) (left * onePartWidth);
+    }
+    protected float actualTop(double onePartHeight) {
+        return (float) (top * onePartHeight);
+    }
 
     public Path getPath(double onePartWidth, double onePartHeight) {
         path.reset();
@@ -59,5 +86,11 @@ public abstract class Component {
         Geometry geometry = getGeometry(onePartWidth, onePartHeight);
         Point point = gf.createPoint(new Coordinate(x, y));
         return geometry.contains(point);
+    }
+
+    @NonNull
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

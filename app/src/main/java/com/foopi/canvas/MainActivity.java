@@ -15,8 +15,12 @@ import com.foopi.canvas.view.CanvasView;
 import com.foopi.canvas.view.components.Circle;
 import com.foopi.canvas.view.components.Component;
 import com.foopi.canvas.view.OnComponentClickListener;
+import com.foopi.canvas.view.components.ComponentGroup;
+import com.foopi.canvas.view.components.Polygon;
 import com.foopi.canvas.view.components.Rectangle;
 import com.foopi.canvas.view.components.Text;
+import com.foopi.canvas.view.model.Point;
+import com.vividsolutions.jts.geom.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,30 +81,6 @@ public class MainActivity extends AppCompatActivity {
         red.setControls(false);
         components.add(red);
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-        }
 
 //        Image image = new Image();
 //        image.setLeft(400);
@@ -126,6 +106,42 @@ public class MainActivity extends AppCompatActivity {
         text.setControls(true);
         components.add(text);
 
+        float left = 252.6f;
+        float top = 209.6f;
+        Polygon polygon = new Polygon();
+        polygon.setLeft(left);
+        polygon.setTop(top);
+        polygon.setFillColor("#ff0000");
+        polygon.setOpacity(0.2f);
+        polygon.addPoint(new Point(253 - left, 210 - top));
+        polygon.addPoint(new Point(347 - left, 236 - top));
+        polygon.addPoint(new Point(264 - left, 292 - top));
+        polygon.setControls(true);
+        components.add(polygon);
+
+        ComponentGroup componentGroup = new ComponentGroup();
+        componentGroup.setLeft(352.6f);
+        componentGroup.setTop(209.6f);
+        componentGroup.setControls(true);
+        Polygon po = new Polygon();
+        po.setLeft(0);
+        po.setTop(0);
+        po.setFillColor("#ff0000");
+        po.setOpacity(0.2f);
+        po.addPoint(new Point(0, 0));
+        po.addPoint(new Point(180, 0));
+        po.addPoint(new Point(90, 90));
+        componentGroup.addComponent(po);
+
+        Rectangle r = new Rectangle();
+        r.setLeft(0);
+        r.setTop(10);
+        r.setWidth(100);
+        r.setHeight(50);
+        r.setFillColor("#0000ff");
+        componentGroup.addComponent(r);
+
+        components.add(componentGroup);
 
         canvasView.setComponents(components);
     }

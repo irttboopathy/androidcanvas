@@ -13,29 +13,11 @@ import com.vividsolutions.jts.geom.Polygon;
 
 public class Text extends Component {
 
-    private float left;
-    private float top;
     private String text;
     private float textSize;
 
     private String fillColor = "#000000";
     private String backgroundColor;
-
-    public float getLeft() {
-        return left;
-    }
-
-    public void setLeft(float left) {
-        this.left = left;
-    }
-
-    public float getTop() {
-        return top;
-    }
-
-    public void setTop(float top) {
-        this.top = top;
-    }
 
     public String getText() {
         return text;
@@ -117,13 +99,5 @@ public class Text extends Component {
         paint.setStyle(Paint.Style.FILL);
         paint.getTextBounds(text, 0, text.length(), bounds);
         canvas.drawText(text, actualLeft(onePartWidth), actualTop(onePartHeight) + bounds.height(), paint);
-    }
-
-    private float actualTop(double onePartHeight) {
-        return (float) (top * onePartHeight) + padding;
-    }
-
-    private float actualLeft(double onePartWidth) {
-        return (float) (left * onePartWidth) + padding;
     }
 }

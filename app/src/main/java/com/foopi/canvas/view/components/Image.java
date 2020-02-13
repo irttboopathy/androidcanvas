@@ -9,27 +9,9 @@ import com.vividsolutions.jts.geom.Geometry;
 
 public class Image extends Component {
 
-    private float left;
-    private float top;
     private Bitmap bitmap;
     private float scaleX;
     private float scaleY;
-
-    public float getLeft() {
-        return left;
-    }
-
-    public void setLeft(float left) {
-        this.left = left;
-    }
-
-    public float getTop() {
-        return top;
-    }
-
-    public void setTop(float top) {
-        this.top = top;
-    }
 
     public Bitmap getBitmap() {
         return bitmap;
@@ -53,13 +35,6 @@ public class Image extends Component {
 
     public void setScaleY(float scaleY) {
         this.scaleY = scaleY;
-    }
-
-    private float actualLeft(double onePartWidth) {
-        return (float) (left * onePartWidth);
-    }
-    private float actualTop(double onePartHeight) {
-        return (float) (top * onePartHeight);
     }
 
     @Override

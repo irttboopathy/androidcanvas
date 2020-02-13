@@ -12,30 +12,12 @@ import com.vividsolutions.jts.geom.Point;
 
 public class Circle extends Component {
 
-    private float left;
-    private float top;
     private float radius;
 
     private String fillColor;
     private float opacity = 1;
     private String strokeColor;
     private float strokeWidth = 1;
-
-    public float getLeft() {
-        return left;
-    }
-
-    public void setLeft(float left) {
-        this.left = left;
-    }
-
-    public float getTop() {
-        return top;
-    }
-
-    public void setTop(float top) {
-        this.top = top;
-    }
 
     public float getRadius() {
         return radius;
@@ -71,12 +53,12 @@ public class Circle extends Component {
 
     private Coordinate pointCoordinate = new Coordinate();
 
-    private double actualLeft(double onePartWidth) {
-        return (left + radius) * onePartWidth;
+    protected float actualLeft(double onePartWidth) {
+        return (float) ((left + radius) * onePartWidth);
     }
 
-    private double actualTop(double onePartHeight) {
-        return (top + radius) * onePartHeight;
+    protected float actualTop(double onePartHeight) {
+        return (float) ((top + radius) * onePartHeight);
     }
 
     @Override
@@ -85,7 +67,7 @@ public class Circle extends Component {
         pointCoordinate.y = actualTop(onePartHeight);
 
         Point point = gf.createPoint(pointCoordinate);
-        Geometry circle = point.buffer(radius);
+        Geometry circle = point.buffer(radius * onePartWidth);
         return circle;
     }
 

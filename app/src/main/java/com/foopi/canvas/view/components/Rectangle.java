@@ -16,8 +16,6 @@ import org.json.JSONObject;
 
 public class Rectangle extends Component {
 
-    private float top;
-    private float left;
     private float width;
     private float height;
 
@@ -29,22 +27,6 @@ public class Rectangle extends Component {
     private double angle = 0;
     private double scaleX = 1;
     private double scaleY = 1;
-
-    public float getTop() {
-        return top;
-    }
-
-    public void setTop(float top) {
-        this.top = top;
-    }
-
-    public float getLeft() {
-        return left;
-    }
-
-    public void setLeft(float left) {
-        this.left = left;
-    }
 
     public float getWidth() {
         return width;
@@ -135,12 +117,6 @@ public class Rectangle extends Component {
         controls = param.optBoolean("controls", false);
     }
 
-    private float actualLeft(double onePartWidth) {
-        return (float) (left * onePartWidth);
-    }
-    private float actualTop(double onePartHeight) {
-        return (float) (top * onePartHeight);
-    }
     private float actualRight(double onePartWidth) {
         return (float) ((left + width) * onePartWidth);
     }
