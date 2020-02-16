@@ -17,6 +17,9 @@ import java.util.List;
 
 public class CanvasView extends View {
 
+    private float top = 0;
+    private float left = 0;
+
     private Paint paint;
 
     private double onePartWidth;
@@ -31,6 +34,10 @@ public class CanvasView extends View {
 
     public CanvasView(Context context) {
         super(context);
+        initializeView();
+    }
+
+    private void initializeView() {
         paint = new Paint();
         paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -51,29 +58,27 @@ public class CanvasView extends View {
     }
 
     public CanvasView(Context context, @Nullable AttributeSet attrs) {
-        this(context);
+        super(context, attrs);
+        initializeView();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int measuredWidth = getMeasuredWidth();
-        int measuredHeight = getMeasuredHeight();
-        try {
-            if (measuredWidth > measuredHeight) {
-                measuredWidth = measuredHeight;
-            }
-            else {
-                measuredHeight = measuredWidth;
-            }
-
-            setMeasuredDimension(measuredWidth, measuredHeight);
-
-            onePartWidth = measuredWidth / totalPartWidth;
-            onePartHeight = measuredHeight / totalPartHeight;
-
-        } catch (Exception ex) {}
+//        int measuredWidth = getMeasuredWidth();
+//        int measuredHeight = getMeasuredHeight();
+//        try {
+//            if (measuredWidth > measuredHeight) {
+//                measuredWidth = measuredHeight;
+//            }
+//            else {
+//                measuredHeight = measuredWidth;
+//            }
+//
+//            setMeasuredDimension(measuredWidth, measuredHeight);
+//
+//        } catch (Exception ex) {}
     }
 
     public OnComponentClickListener getOnComponentClickListener() {
@@ -87,10 +92,15 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        canvas.drawColor(Color.GRAY);
+
+        onePartWidth = getMeasuredWidth() / totalPartWidth;
+        onePartHeight = getMeasuredHeight() / totalPartHeight;
+
 
         try {
             for (Component component : components) {
-                component.draw(onePartWidth, onePartHeight, canvas, paint);
+                component.draw(left, top, onePartWidth, onePartHeight, canvas, paint);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -124,5 +134,40 @@ public class CanvasView extends View {
         }
         this.components = components;
         this.postInvalidate();
+    }
+
+    public void zoomIn() {
+        totalPartWidth /= 2;
+        totalPartHeight /= 2;
+        this.invalidate();
+    }
+
+    public void zoomOut() {
+        totalPartWidth *= 2;
+        totalPartHeight *= 2;
+        this.invalidate();
+    }
+
+    public void left() {
+        left -= 100;
+//        if (left < 0) {
+//            left = 0;
+//        }
+        this.invalidate();
+    }
+
+    public void right() {
+        left += 100;
+        invalidate();
+    }
+
+    public void up() {
+        top -= 100;
+        invalidate();
+    }
+
+    public void down() {
+        top += 100;
+        invalidate();
     }
 }

@@ -21,16 +21,16 @@ public class Point {
         return new Coordinate();
     }
 
-    public Coordinate getCoordinate(double left, double top) {
-        return getCoordinate(null, left, top);
+    public Coordinate getCoordinate(double left, double top, double onePartWidth, double onePartHeight) {
+        return getCoordinate(null, left, top, onePartWidth, onePartHeight);
     }
 
-    public Coordinate getCoordinate(Coordinate coordinate, double left, double top) {
+    public Coordinate getCoordinate(Coordinate coordinate, double left, double top, double onePartWidth, double onePartHeight) {
         if (coordinate == null) {
             coordinate = new Coordinate();
         }
-        coordinate.x = x + left;
-        coordinate.y = y + top;
+        coordinate.x = (x * onePartWidth) + left;
+        coordinate.y = (y * onePartHeight) + top;
         return coordinate;
     }
 

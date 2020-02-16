@@ -28,6 +28,9 @@ public abstract class Component implements Cloneable {
     }
 
     public void setLeft(float left) {
+        if (left < 0) {
+            left = 0;
+        }
         this.left = left;
     }
 
@@ -36,6 +39,9 @@ public abstract class Component implements Cloneable {
     }
 
     public void setTop(float top) {
+        if (top < 0) {
+            top = 0;
+        }
         this.top = top;
     }
 
@@ -55,18 +61,24 @@ public abstract class Component implements Cloneable {
         this.controls = controls;
     }
 
-    public abstract Geometry getGeometry(double onePartWidth, double onePartHeight);
+    public abstract Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight);
 
     protected float actualLeft(double onePartWidth) {
-        return (float) (left * onePartWidth);
+        return actualX(left, onePartWidth);
     }
     protected float actualTop(double onePartHeight) {
-        return (float) (top * onePartHeight);
+        return actualY(top, onePartHeight);
+    }
+    protected float actualX(float x, double onePartWidth) {
+        return (float) (x * onePartWidth);
+    }
+    protected float actualY(float y, double onePartHeight) {
+        return (float) (y * onePartHeight);
     }
 
-    public Path getPath(double onePartWidth, double onePartHeight) {
+    public Path getPath(float left, float top, double onePartWidth, double onePartHeight) {
         path.reset();
-        Geometry geometry = getGeometry(onePartWidth, onePartHeight);
+        Geometry geometry = getGeometry(left, top, onePartWidth, onePartHeight);
         Coordinate[] coordinates = geometry.getCoordinates();
         for (int i = 0; i < coordinates.length; i++) {
             Coordinate coordinate = coordinates[i];
@@ -80,10 +92,10 @@ public abstract class Component implements Cloneable {
         return path;
     }
 
-    public abstract void draw(double onePartWidth, double onePartHeight, Canvas canvas, Paint paint);
+    public abstract void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint);
 
     public final boolean isBounded(double onePartWidth, double onePartHeight, float x, float y) {
-        Geometry geometry = getGeometry(onePartWidth, onePartHeight);
+        Geometry geometry = getGeometry(left, top, onePartWidth, onePartHeight);
         Point point = gf.createPoint(new Coordinate(x, y));
         return geometry.contains(point);
     }

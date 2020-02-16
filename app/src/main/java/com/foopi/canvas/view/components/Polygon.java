@@ -6,11 +6,13 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.text.TextUtils;
 
-import androidx.annotation.Nullable;
-
 import com.foopi.canvas.view.model.Point;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +90,7 @@ public class Polygon extends Component {
     }
 
     @Override
-    public Geometry getGeometry(double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
         if (!isValidPoints) {
             if (points.size() >= 3) {
                 Point first = points.get(0);
@@ -107,7 +109,7 @@ public class Polygon extends Component {
         }
         for (int i = 0; i < points.size(); i++) {
             Point point = points.get(i);
-            point.getCoordinate(coordinates.get(i), actualLeft(onePartWidth), actualTop(onePartHeight));
+            point.getCoordinate(coordinates.get(i), actualLeft(onePartWidth), actualTop(onePartHeight), onePartWidth, onePartHeight);
         }
         com.vividsolutions.jts.geom.Polygon polygon = gf.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
         return polygon;
@@ -116,10 +118,14 @@ public class Polygon extends Component {
     private boolean isValidPoints = false;
 
     @Override
-    public void draw(double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        Path path = getPath(onePartWidth, onePartHeight);
+    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+        Path path = getPath(left, top, onePartWidth, onePartHeight);
         if (!TextUtils.isEmpty(fillColor)) {
-            paint.setColor(Color.parseColor(fillColor));
+            try {
+                paint.setColor(Color.parseColor(fillColor));
+            } catch (Exception e) {
+                paint.setColor(Color.RED);
+            }
             paint.setStyle(Paint.Style.FILL);
             paint.setAlpha((int) (255 * opacity));
             canvas.drawPath(path, paint);
@@ -133,4 +139,10 @@ public class Polygon extends Component {
     }
 
 
+    public void setPoints(JSONArray p1Array) throws JSONException {
+        for (int i = 0; i < p1Array.length(); i++) {
+            JSONObject jsonObject = p1Array.getJSONObject(i);
+            addPoint(new Point((float) jsonObject.getDouble("x"), (float) jsonObject.getDouble("y")));
+        }
+    }
 }

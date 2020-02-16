@@ -3,7 +3,6 @@ package com.foopi.canvas.view.components;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 
@@ -37,13 +36,13 @@ public class ComponentGroup extends Component {
     private List<Geometry> geometries = new ArrayList<>();
 
     @Override
-    public Geometry getGeometry(double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
         if (!movedComponentsToNewPosition) {
             moveComponentsToNewPosition();
         }
         geometries.clear();
         for (Component component : positionedComponents) {
-            Geometry geometry = component.getGeometry(onePartWidth, onePartHeight);
+            Geometry geometry = component.getGeometry(left, top, onePartWidth, onePartHeight);
             geometries.add(geometry);
         }
         GeometryCollection gc = new GeometryCollection(geometries.toArray(new Geometry[geometries.size()]), gf);
@@ -65,12 +64,12 @@ public class ComponentGroup extends Component {
     }
 
     @Override
-    public void draw(double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
         if (!movedComponentsToNewPosition) {
             moveComponentsToNewPosition();
         }
         for (Component component : positionedComponents) {
-            component.draw(onePartWidth, onePartHeight, canvas, paint);
+            component.draw(left, top, onePartWidth, onePartHeight, canvas, paint);
         }
     }
 }

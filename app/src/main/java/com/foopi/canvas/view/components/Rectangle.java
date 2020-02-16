@@ -131,7 +131,7 @@ public class Rectangle extends Component {
     private Coordinate[] coordinates = {topLeftCoordinate, topRightCoordinate, bottomRightCoordinate, bottomLeftCoordinate, topLeftCoordinate};
 
     @Override
-    public Geometry getGeometry(double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
         topLeftCoordinate.x = actualLeft(onePartWidth);
         topLeftCoordinate.y = actualTop(onePartHeight);
 
@@ -156,8 +156,8 @@ public class Rectangle extends Component {
     }
 
     @Override
-    public void draw(double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        Path path = getPath(onePartWidth, onePartHeight);
+    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+        Path path = getPath(left, top, onePartWidth, onePartHeight);
         if (!TextUtils.isEmpty(fillColor)) {
             paint.setColor(Color.parseColor(fillColor));
             paint.setStyle(Paint.Style.FILL);

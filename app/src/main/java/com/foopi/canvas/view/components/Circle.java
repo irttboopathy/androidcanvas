@@ -62,9 +62,9 @@ public class Circle extends Component {
     }
 
     @Override
-    public Geometry getGeometry(double onePartWidth, double onePartHeight) {
-        pointCoordinate.x = actualLeft(onePartWidth);
-        pointCoordinate.y = actualTop(onePartHeight);
+    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
+        pointCoordinate.x = left +  actualLeft(onePartWidth);
+        pointCoordinate.y = top + actualTop(onePartHeight);
 
         Point point = gf.createPoint(pointCoordinate);
         Geometry circle = point.buffer(radius * onePartWidth);
@@ -72,8 +72,8 @@ public class Circle extends Component {
     }
 
     @Override
-    public void draw(double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        Path path = getPath(onePartWidth, onePartHeight);
+    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+        Path path = getPath(left, top, onePartWidth, onePartHeight);
         if (!TextUtils.isEmpty(fillColor)) {
             paint.setColor(Color.parseColor(fillColor));
             paint.setStyle(Paint.Style.FILL);

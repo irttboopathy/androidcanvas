@@ -14,7 +14,7 @@ import com.vividsolutions.jts.geom.Polygon;
 public class Text extends Component {
 
     private String text;
-    private float textSize;
+    private float textSize = 12;
 
     private String fillColor = "#000000";
     private String backgroundColor;
@@ -63,9 +63,9 @@ public class Text extends Component {
     private Coordinate[] coordinates = {topLeftCoordinate, topRightCoordinate, bottomRightCoordinate, bottomLeftCoordinate, topLeftCoordinate};
 
     @Override
-    public Geometry getGeometry(double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
         myPaint.setColor(Color.parseColor(fillColor));
-        myPaint.setTextSize(textSize);
+        myPaint.setTextSize((float) (textSize * (onePartWidth + onePartHeight) / 2));
         myPaint.setStyle(Paint.Style.FILL);
         myPaint.getTextBounds(text, 0, text.length(), bounds);
 
@@ -86,16 +86,16 @@ public class Text extends Component {
     }
 
     @Override
-    public void draw(double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
         if (!TextUtils.isEmpty(backgroundColor)) {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.parseColor(backgroundColor));
-            Path path = getPath(onePartWidth, onePartHeight);
+            Path path = getPath(left, top, onePartWidth, onePartHeight);
             canvas.drawPath(path, paint);
         }
 
         paint.setColor(Color.parseColor(fillColor));
-        paint.setTextSize(textSize);
+        paint.setTextSize((float) (textSize * (onePartWidth + onePartHeight) / 2));
         paint.setStyle(Paint.Style.FILL);
         paint.getTextBounds(text, 0, text.length(), bounds);
         canvas.drawText(text, actualLeft(onePartWidth), actualTop(onePartHeight) + bounds.height(), paint);

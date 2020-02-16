@@ -38,12 +38,12 @@ public class Image extends Component {
     }
 
     @Override
-    public Geometry getGeometry(double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
         return null;
     }
 
     @Override
-    public void draw(double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
         Matrix matrix = new Matrix();
         matrix.setScale(scaleX, scaleY, actualLeft(onePartWidth), actualTop(onePartHeight));
         canvas.drawBitmap(bitmap, matrix, paint);
