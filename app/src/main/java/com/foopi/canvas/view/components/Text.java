@@ -69,17 +69,17 @@ public class Text extends Component {
         myPaint.setStyle(Paint.Style.FILL);
         myPaint.getTextBounds(text, 0, text.length(), bounds);
 
-        topLeftCoordinate.x = actualLeft(onePartWidth) - padding;
-        topLeftCoordinate.y = actualTop(onePartHeight) - padding;
+        topLeftCoordinate.x = left + actualLeft(onePartWidth) - padding;
+        topLeftCoordinate.y = top + actualTop(onePartHeight) - padding;
 
-        topRightCoordinate.x = actualLeft(onePartWidth) + bounds.width() + padding;
-        topRightCoordinate.y = actualTop(onePartHeight) - padding;
+        topRightCoordinate.x = left + actualLeft(onePartWidth) + bounds.width() + padding;
+        topRightCoordinate.y = top + actualTop(onePartHeight) - padding;
 
-        bottomLeftCoordinate.x = actualLeft(onePartWidth) - padding;
-        bottomLeftCoordinate.y = actualTop(onePartHeight) + bounds.height() + padding;
+        bottomLeftCoordinate.x = left + actualLeft(onePartWidth) - padding;
+        bottomLeftCoordinate.y = top + actualTop(onePartHeight) + bounds.height() + padding;
 
-        bottomRightCoordinate.x = actualLeft(onePartWidth) + bounds.width() + padding;
-        bottomRightCoordinate.y = actualTop(onePartHeight) + bounds.height() + padding;
+        bottomRightCoordinate.x = left + actualLeft(onePartWidth) + bounds.width() + padding;
+        bottomRightCoordinate.y = top + actualTop(onePartHeight) + bounds.height() + padding;
 
         Polygon polygon = gf.createPolygon(coordinates);
         return polygon;

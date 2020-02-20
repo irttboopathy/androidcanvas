@@ -28,9 +28,9 @@ public abstract class Component implements Cloneable {
     }
 
     public void setLeft(float left) {
-        if (left < 0) {
-            left = 0;
-        }
+//        if (left < 0) {
+//            left = 0;
+//        }
         this.left = left;
     }
 
@@ -39,9 +39,9 @@ public abstract class Component implements Cloneable {
     }
 
     public void setTop(float top) {
-        if (top < 0) {
-            top = 0;
-        }
+//        if (top < 0) {
+//            top = 0;
+//        }
         this.top = top;
     }
 

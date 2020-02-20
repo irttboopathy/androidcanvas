@@ -51,6 +51,14 @@ public class Circle extends Component {
         this.strokeWidth = strokeWidth;
     }
 
+    public float getOpacity() {
+        return opacity;
+    }
+
+    public void setOpacity(float opacity) {
+        this.opacity = opacity;
+    }
+
     private Coordinate pointCoordinate = new Coordinate();
 
     protected float actualLeft(double onePartWidth) {

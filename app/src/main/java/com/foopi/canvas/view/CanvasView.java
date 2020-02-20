@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -31,6 +32,8 @@ public class CanvasView extends View {
     private List<Component> components = new ArrayList<>();
 
     private OnComponentClickListener onComponentClickListener;
+    private double widthPercentage;
+    private double heightPercentage;
 
     public CanvasView(Context context) {
         super(context);
@@ -66,19 +69,15 @@ public class CanvasView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-//        int measuredWidth = getMeasuredWidth();
-//        int measuredHeight = getMeasuredHeight();
-//        try {
-//            if (measuredWidth > measuredHeight) {
-//                measuredWidth = measuredHeight;
-//            }
-//            else {
-//                measuredHeight = measuredWidth;
-//            }
-//
-//            setMeasuredDimension(measuredWidth, measuredHeight);
-//
-//        } catch (Exception ex) {}
+        if (getMeasuredHeight() > getMeasuredWidth()) {
+            setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
+        }
+        else {
+            setMeasuredDimension(getMeasuredHeight(), getMeasuredHeight());
+        }
+
+        widthPercentage = getMeasuredWidth() / totalPartWidth;
+        heightPercentage = getMeasuredHeight() / totalPartHeight;
     }
 
     public OnComponentClickListener getOnComponentClickListener() {
@@ -136,15 +135,20 @@ public class CanvasView extends View {
         this.postInvalidate();
     }
 
+    private float percentageZoom = 1.1f;
     public void zoomIn() {
-        totalPartWidth /= 2;
-        totalPartHeight /= 2;
+        totalPartWidth /= (percentageZoom);
+        totalPartHeight /= (percentageZoom);
+
+        Log.e(getClass().toString(), totalPartWidth + " : " + totalPartHeight);
         this.invalidate();
     }
 
     public void zoomOut() {
-        totalPartWidth *= 2;
-        totalPartHeight *= 2;
+        totalPartWidth *= (percentageZoom);
+        totalPartHeight *= (percentageZoom);
+
+        Log.e(getClass().toString(), totalPartWidth + " : " + totalPartHeight);
         this.invalidate();
     }
 

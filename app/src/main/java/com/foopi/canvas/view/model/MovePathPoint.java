@@ -16,4 +16,9 @@ public class MovePathPoint extends PathPoint {
     public void updatePath(Path path, double left, double top, double onePartWidth, double onePartHeight) {
         path.moveTo((float) ((x * onePartWidth) + left), (float) ((y * onePartHeight) + top));
     }
+
+    @Override
+    public PathPoint clonePathPoint() {
+        return new MovePathPoint(this);
+    }
 }

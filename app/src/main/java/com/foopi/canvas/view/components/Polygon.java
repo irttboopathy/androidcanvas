@@ -109,7 +109,7 @@ public class Polygon extends Component {
         }
         for (int i = 0; i < points.size(); i++) {
             Point point = points.get(i);
-            point.getCoordinate(coordinates.get(i), actualLeft(onePartWidth), actualTop(onePartHeight), onePartWidth, onePartHeight);
+            point.getCoordinate(coordinates.get(i), left + actualLeft(onePartWidth), top + actualTop(onePartHeight), onePartWidth, onePartHeight);
         }
         com.vividsolutions.jts.geom.Polygon polygon = gf.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
         return polygon;

@@ -28,7 +28,10 @@ public class Path extends Component {
     private float opacity = 1;
 
     private List<PathPoint> pathPoints = new ArrayList<>();
+    private List<PathPoint> modifiedPathPoints = new ArrayList<>();
     private List<Coordinate> coordinates = new ArrayList<>();
+
+    private boolean validated = false;
 
     public String getFillColor() {
         return fillColor;
@@ -73,6 +76,7 @@ public class Path extends Component {
         this.pathPoints = pathPoints;
 
         coordinates.clear();
+        validated = false;
         for (Point p : pathPoints) {
             coordinates.add(p.getCoordinate());
         }
@@ -86,31 +90,50 @@ public class Path extends Component {
         if (pathPoint != null) {
             pathPoints.add(pathPoint);
             coordinates.add(new Coordinate());
+            validated = false;
         }
     }
 
     @Override
     public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
-        updateCoordinates(onePartWidth, onePartHeight);
+        updateCoordinates(left, top, onePartWidth, onePartHeight);
 //        gf.
         return null;
     }
 
-    private void updateCoordinates(double onePartWidth, double onePartHeight) {
+    private void updateCoordinates(float left, float top, double onePartWidth, double onePartHeight) {
+        if (validated) {
+            return;
+        }
+
+        float minX = Integer.MAX_VALUE;
+        float minY = Integer.MAX_VALUE;
+        Point p = new Point(minX, minY);
+
+        for (PathPoint pathPoint : pathPoints) {
+            pathPoint.getMin(p);
+        }
+
+        modifiedPathPoints = new ArrayList<>(pathPoints.size());
+        validated = true;
         for (int i = 0; i < pathPoints.size(); i++) {
-            Point point = pathPoints.get(i);
-            point.getCoordinate(coordinates.get(i), actualLeft(onePartWidth), actualTop(onePartHeight), onePartWidth, onePartHeight);
+            PathPoint point = pathPoints.get(i);
+            PathPoint clonedPathPoint = point.clonePathPoint();
+            clonedPathPoint.adjustPoints(p);
+
+            modifiedPathPoints.add(clonedPathPoint);
+            clonedPathPoint.getCoordinate(coordinates.get(i), left + actualLeft(onePartWidth), top + actualTop(onePartHeight), onePartWidth, onePartHeight);
         }
     }
 
     @Override
     public android.graphics.Path getPath(float left, float top, double onePartWidth, double onePartHeight) {
-        updateCoordinates(onePartWidth, onePartHeight);
+        updateCoordinates(left, top, onePartWidth, onePartHeight);
 
         this.path.reset();
-        for (int i = 0; i < pathPoints.size(); i++) {
-            PathPoint pathPoint = pathPoints.get(i);
-            pathPoint.updatePath(path, actualLeft(onePartWidth), actualTop(onePartHeight), onePartWidth, onePartHeight);
+        for (int i = 0; i < modifiedPathPoints.size(); i++) {
+            PathPoint pathPoint = modifiedPathPoints.get(i);
+            pathPoint.updatePath(path, left + actualLeft(onePartWidth), top + actualTop(onePartHeight), onePartWidth, onePartHeight);
         }
         return path;
     }
@@ -145,9 +168,12 @@ public class Path extends Component {
             } else if (j.getString(0).equals("L")) {
                 addPathPoint(new LinePathPoint((float) j.getDouble(1), (float) j.getDouble(2)));
             } else if (j.getString(0).equals("C")) {
-                addPathPoint(new CubicPathPoint((float) j.getDouble(1), (float) j.getDouble(2),
+                addPathPoint(new CubicPathPoint(
+
                         (float) j.getDouble(3), (float) j.getDouble(4),
-                        (float) j.getDouble(5), (float) j.getDouble(6)));
+                                (float) j.getDouble(1), (float) j.getDouble(2),
+                        (float) j.getDouble(5), (float) j.getDouble(6))
+                        );
             } else if (j.getString(0).equals("Z")) {
                 addPathPoint(new ClosePathPoint());
             }

@@ -16,4 +16,9 @@ public class LinePathPoint extends PathPoint {
     public void updatePath(Path path, double left, double top, double onePartWidth, double onePartHeight) {
         path.lineTo((float) ((x * onePartWidth) + left), (float) ((y * onePartHeight) + top));
     }
+
+    @Override
+    public PathPoint clonePathPoint() {
+        return new LinePathPoint(this);
+    }
 }

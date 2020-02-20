@@ -16,4 +16,15 @@ public class ClosePathPoint extends PathPoint {
     public void updatePath(Path path, double left, double top, double onePartWidth, double onePartHeight) {
         path.close();
     }
+
+    @Override
+    public PathPoint clonePathPoint() {
+        return new ClosePathPoint();
+    }
+
+    @Override
+    public void getMin(Point point) {}
+
+    @Override
+    public void adjustPoints(Point point) {}
 }

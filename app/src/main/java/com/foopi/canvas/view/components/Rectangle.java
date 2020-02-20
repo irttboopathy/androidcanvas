@@ -132,17 +132,17 @@ public class Rectangle extends Component {
 
     @Override
     public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
-        topLeftCoordinate.x = actualLeft(onePartWidth);
-        topLeftCoordinate.y = actualTop(onePartHeight);
+        topLeftCoordinate.x = left + actualLeft(onePartWidth);
+        topLeftCoordinate.y = top + actualTop(onePartHeight);
 
-        topRightCoordinate.x = actualRight(onePartWidth);
-        topRightCoordinate.y = actualTop(onePartHeight);
+        topRightCoordinate.x = left + actualRight(onePartWidth);
+        topRightCoordinate.y = top + actualTop(onePartHeight);
 
-        bottomLeftCoordinate.x = actualLeft(onePartWidth);
-        bottomLeftCoordinate.y = actualBottom(onePartHeight);
+        bottomLeftCoordinate.x = left + actualLeft(onePartWidth);
+        bottomLeftCoordinate.y = top + actualBottom(onePartHeight);
 
-        bottomRightCoordinate.x = actualRight(onePartWidth);
-        bottomRightCoordinate.y = actualBottom(onePartHeight);
+        bottomRightCoordinate.x = left + actualRight(onePartWidth);
+        bottomRightCoordinate.y = top + actualBottom(onePartHeight);
 
         Polygon polygon = gf.createPolygon(coordinates);
 
@@ -159,7 +159,11 @@ public class Rectangle extends Component {
     public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
         Path path = getPath(left, top, onePartWidth, onePartHeight);
         if (!TextUtils.isEmpty(fillColor)) {
-            paint.setColor(Color.parseColor(fillColor));
+            try {
+                paint.setColor(Color.parseColor(fillColor));
+            } catch (Exception ex) {
+                paint.setColor(Color.RED);
+            }
             paint.setStyle(Paint.Style.FILL);
             paint.setAlpha((int) (255 * opacity));
             canvas.drawPath(path, paint);
