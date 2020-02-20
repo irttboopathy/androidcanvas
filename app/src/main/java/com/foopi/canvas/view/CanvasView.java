@@ -23,17 +23,18 @@ public class CanvasView extends View {
 
     private Paint paint;
 
-    private double onePartWidth;
-    private double onePartHeight;
+//    private double onePartWidth;
+//    private double onePartHeight;
 
-    private double totalPartWidth;
-    private double totalPartHeight;
+//    private double totalPartWidth;
+//    private double totalPartHeight;
 
     private List<Component> components = new ArrayList<>();
 
     private OnComponentClickListener onComponentClickListener;
     private double widthPercentage;
     private double heightPercentage;
+    private float zoomLevel = 1.0f;
 
     public CanvasView(Context context) {
         super(context);
@@ -46,19 +47,24 @@ public class CanvasView extends View {
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
-    public void setTotalPartWidth(double totalPartWidth, double totalPartHeight) {
-        this.totalPartWidth = totalPartWidth;
-        this.totalPartHeight = totalPartHeight;
-        this.postInvalidate();
+    public void zoomLevel(float zoomLevel) {
+        this.zoomLevel = zoomLevel;
+        this.invalidate();
     }
 
-    public double getOnePartWidth() {
-        return onePartWidth;
-    }
+//    public void setTotalPartWidth(double totalPartWidth, double totalPartHeight) {
+//        this.totalPartWidth = totalPartWidth;
+//        this.totalPartHeight = totalPartHeight;
+//        this.postInvalidate();
+//    }
 
-    public double getOnePartHeight() {
-        return onePartHeight;
-    }
+//    public double getOnePartWidth() {
+//        return onePartWidth;
+//    }
+//
+//    public double getOnePartHeight() {
+//        return onePartHeight;
+//    }
 
     public CanvasView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -69,15 +75,15 @@ public class CanvasView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        if (getMeasuredHeight() > getMeasuredWidth()) {
-            setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
-        }
-        else {
-            setMeasuredDimension(getMeasuredHeight(), getMeasuredHeight());
-        }
+//        if (getMeasuredHeight() > getMeasuredWidth()) {
+//            setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
+//        }
+//        else {
+//            setMeasuredDimension(getMeasuredHeight(), getMeasuredHeight());
+//        }
 
-        widthPercentage = getMeasuredWidth() / totalPartWidth;
-        heightPercentage = getMeasuredHeight() / totalPartHeight;
+//        widthPercentage = getMeasuredWidth() / totalPartWidth;
+//        heightPercentage = getMeasuredHeight() / totalPartHeight;
     }
 
     public OnComponentClickListener getOnComponentClickListener() {
@@ -93,13 +99,13 @@ public class CanvasView extends View {
         super.onDraw(canvas);
         canvas.drawColor(Color.GRAY);
 
-        onePartWidth = getMeasuredWidth() / totalPartWidth;
-        onePartHeight = getMeasuredHeight() / totalPartHeight;
+//        onePartWidth = getMeasuredWidth() / totalPartWidth;
+//        onePartHeight = getMeasuredHeight() / totalPartHeight;
 
 
         try {
             for (Component component : components) {
-                component.draw(left, top, onePartWidth, onePartHeight, canvas, paint);
+                component.draw(left, top, zoomLevel, canvas, paint);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -114,7 +120,7 @@ public class CanvasView extends View {
             for (int i = components.size() - 1; i >= 0; i--) {
                 Component component = components.get(i);
                 if (component.isVisible() && component.isControls()) {
-                    boolean bounded = component.isBounded(onePartWidth, onePartHeight, x, y);
+                    boolean bounded = component.isBounded(zoomLevel, x, y);
                     if (bounded) {
                         if (onComponentClickListener != null) {
                             onComponentClickListener.onComponentClick(this, component);
@@ -137,18 +143,20 @@ public class CanvasView extends View {
 
     private float percentageZoom = 1.1f;
     public void zoomIn() {
-        totalPartWidth /= (percentageZoom);
-        totalPartHeight /= (percentageZoom);
-
-        Log.e(getClass().toString(), totalPartWidth + " : " + totalPartHeight);
+        this.zoomLevel *= percentageZoom;
+//        totalPartWidth /= (percentageZoom);
+//        totalPartHeight /= (percentageZoom);
+//
+//        Log.e(getClass().toString(), totalPartWidth + " : " + totalPartHeight);
         this.invalidate();
     }
 
     public void zoomOut() {
-        totalPartWidth *= (percentageZoom);
-        totalPartHeight *= (percentageZoom);
-
-        Log.e(getClass().toString(), totalPartWidth + " : " + totalPartHeight);
+        this.zoomLevel /= percentageZoom;
+//        totalPartWidth *= (percentageZoom);
+//        totalPartHeight *= (percentageZoom);
+//
+//        Log.e(getClass().toString(), totalPartWidth + " : " + totalPartHeight);
         this.invalidate();
     }
 

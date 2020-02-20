@@ -8,8 +8,6 @@ import android.text.TextUtils;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
 
@@ -94,21 +92,21 @@ public class Ellipse extends Component {
     }
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
         Coordinate pointCoordinate = new Coordinate();
-        pointCoordinate.x = left +  actualLeft(onePartWidth);
-        pointCoordinate.y = top + actualTop(onePartHeight);
+        pointCoordinate.x = left +  actualLeft(zoomLevel);
+        pointCoordinate.y = top + actualTop(zoomLevel);
 
         GeometricShapeFactory factory = new GeometricShapeFactory();
-        factory.setCentre(new Coordinate(left + actualLeft(onePartWidth), top + actualTop(onePartHeight)));
-        factory.setWidth(actualX(this.rx, onePartWidth));
-        factory.setHeight(actualY(this.ry, onePartHeight));
+        factory.setCentre(new Coordinate(left + actualLeft(zoomLevel), top + actualTop(zoomLevel)));
+        factory.setWidth(actualCoordinateValue(this.rx, zoomLevel));
+        factory.setHeight(actualCoordinateValue(this.ry, zoomLevel));
         Polygon ellipse = factory.createEllipse();
         return ellipse;
 
 //        LineString lineString = gf.createLineString(new Coordinate[]{
-//                new Coordinate(left + actualX(this.left + this.rx, onePartWidth), top + actualY(this.top + this.rx, onePartHeight)),
-//                new Coordinate(left + actualX(this.left + this.rx, onePartWidth), top + actualY(this.top + this.ry, onePartHeight))
+//                new Coordinate(left + actualCoordinateValue(this.left + this.rx, onePartWidth), top + actualY(this.top + this.rx, onePartHeight)),
+//                new Coordinate(left + actualCoordinateValue(this.left + this.rx, onePartWidth), top + actualY(this.top + this.ry, onePartHeight))
 //        });
 //
 //        float minRadius = rx > ry ? ry : rx;
@@ -130,13 +128,13 @@ public class Ellipse extends Component {
         return (float) ((left + rx / 2) * onePartWidth);
     }
 
-    protected float actualTop(double onePartHeight) {
-        return (float) ((top + ry / 2) * onePartHeight);
+    protected float actualTop(double zoomLevel) {
+        return (float) ((top + ry / 2) * zoomLevel);
     }
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        Path path = getPath(left, top, onePartWidth, onePartHeight);
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
+        Path path = getPath(left, top, zoomLevel);
         if (!TextUtils.isEmpty(fillColor)) {
             try {
                 paint.setColor(Color.parseColor(fillColor));
@@ -147,7 +145,7 @@ public class Ellipse extends Component {
             paint.setAlpha((int) (255 * opacity));
             canvas.drawPath(path, paint);
 //            canvas.drawOval(left + actualLeft(onePartWidth), top + actualTop(onePartWidth),
-//                    actualX(this.left + this.left + rx, onePartWidth) + left,
+//                    actualCoordinateValue(this.left + this.left + rx, onePartWidth) + left,
 //                    actualY(this.top + this.top + ry, onePartHeight) + top, paint);
         }
     }

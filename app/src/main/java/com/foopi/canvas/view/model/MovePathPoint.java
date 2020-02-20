@@ -13,8 +13,8 @@ public class MovePathPoint extends PathPoint {
     }
 
     @Override
-    public void updatePath(Path path, double left, double top, double onePartWidth, double onePartHeight) {
-        path.moveTo((float) ((x * onePartWidth) + left), (float) ((y * onePartHeight) + top));
+    public void updatePath(Path path, double left, double top, double zoomLevel) {
+        path.moveTo((float) ((x * zoomLevel) + left), (float) ((y * zoomLevel) + top));
     }
 
     @Override

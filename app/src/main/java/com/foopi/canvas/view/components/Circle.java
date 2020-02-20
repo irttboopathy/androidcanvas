@@ -61,27 +61,27 @@ public class Circle extends Component {
 
     private Coordinate pointCoordinate = new Coordinate();
 
-    protected float actualLeft(double onePartWidth) {
-        return (float) ((left + radius) * onePartWidth);
+    protected float actualLeft(double zoomLevel) {
+        return (float) ((left + radius) * zoomLevel);
     }
 
-    protected float actualTop(double onePartHeight) {
-        return (float) ((top + radius) * onePartHeight);
+    protected float actualTop(double zoomLevel) {
+        return (float) ((top + radius) * zoomLevel);
     }
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
-        pointCoordinate.x = left +  actualLeft(onePartWidth);
-        pointCoordinate.y = top + actualTop(onePartHeight);
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
+        pointCoordinate.x = left +  actualLeft(zoomLevel);
+        pointCoordinate.y = top + actualTop(zoomLevel);
 
         Point point = gf.createPoint(pointCoordinate);
-        Geometry circle = point.buffer(radius * onePartWidth);
+        Geometry circle = point.buffer(radius * zoomLevel);
         return circle;
     }
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        Path path = getPath(left, top, onePartWidth, onePartHeight);
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
+        Path path = getPath(left, top, zoomLevel);
         if (!TextUtils.isEmpty(fillColor)) {
             paint.setColor(Color.parseColor(fillColor));
             paint.setStyle(Paint.Style.FILL);

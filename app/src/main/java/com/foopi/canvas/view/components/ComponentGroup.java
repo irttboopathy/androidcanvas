@@ -36,13 +36,13 @@ public class ComponentGroup extends Component {
     private List<Geometry> geometries = new ArrayList<>();
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
         if (!movedComponentsToNewPosition) {
             moveComponentsToNewPosition();
         }
         geometries.clear();
         for (Component component : positionedComponents) {
-            Geometry geometry = component.getGeometry(left, top, onePartWidth, onePartHeight);
+            Geometry geometry = component.getGeometry(left, top, zoomLevel);
             geometries.add(geometry);
         }
         GeometryCollection gc = new GeometryCollection(geometries.toArray(new Geometry[geometries.size()]), gf);
@@ -64,12 +64,12 @@ public class ComponentGroup extends Component {
     }
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
         if (!movedComponentsToNewPosition) {
             moveComponentsToNewPosition();
         }
         for (Component component : positionedComponents) {
-            component.draw(left, top, onePartWidth, onePartHeight, canvas, paint);
+            component.draw(left, top, zoomLevel, canvas, paint);
         }
     }
 }

@@ -19,10 +19,10 @@ public class CubicPathPoint extends PathPoint {
     }
 
     @Override
-    public void updatePath(Path path, double left, double top, double onePartWidth, double onePartHeight) {
-        path.cubicTo((float) ((x1 * onePartWidth) + left), (float) ((y1 * onePartHeight) + top),
-                (float) ((x2 * onePartWidth) + left), (float) ((y2 * onePartHeight) + top),
-                (float) ((x * onePartWidth) + left), (float) ((y * onePartHeight) + top));
+    public void updatePath(Path path, double left, double top, double zoomLevel) {
+        path.cubicTo((float) ((x1 * zoomLevel) + left), (float) ((y1 * zoomLevel) + top),
+                (float) ((x2 * zoomLevel) + left), (float) ((y2 * zoomLevel) + top),
+                (float) ((x * zoomLevel) + left), (float) ((y * zoomLevel) + top));
     }
 
     @Override

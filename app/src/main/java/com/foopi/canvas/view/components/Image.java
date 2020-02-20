@@ -38,14 +38,14 @@ public class Image extends Component {
     }
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
         return null;
     }
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
         Matrix matrix = new Matrix();
-        matrix.setScale(scaleX, scaleY, actualLeft(onePartWidth), actualTop(onePartHeight));
+        matrix.setScale(scaleX, scaleY, actualLeft(zoomLevel), actualTop(zoomLevel));
         canvas.drawBitmap(bitmap, matrix, paint);
     }
 }

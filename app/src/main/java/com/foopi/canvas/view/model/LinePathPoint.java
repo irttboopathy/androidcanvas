@@ -13,8 +13,8 @@ public class LinePathPoint extends PathPoint {
     }
 
     @Override
-    public void updatePath(Path path, double left, double top, double onePartWidth, double onePartHeight) {
-        path.lineTo((float) ((x * onePartWidth) + left), (float) ((y * onePartHeight) + top));
+    public void updatePath(Path path, double left, double top, double zoomLevel) {
+        path.lineTo((float) ((x * zoomLevel) + left), (float) ((y * zoomLevel) + top));
     }
 
     @Override

@@ -6,8 +6,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.text.TextUtils;
 
-import com.foopi.canvas.view.model.ClosePathPoint;
-import com.foopi.canvas.view.model.PathPoint;
 import com.foopi.canvas.view.model.Point;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -89,13 +87,13 @@ public class Polyline extends Component {
     }
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
-        updatePoints(left, top, onePartWidth, onePartHeight);
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
+        updatePoints(left, top, zoomLevel);
         LineString lineString = gf.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
         return lineString;
     }
 
-    private void updatePoints(float left, float top, double onePartWidth, double onePartHeight) {
+    private void updatePoints(float left, float top, double zoomLevel) {
         if (validated) {
             return;
         }
@@ -121,13 +119,13 @@ public class Polyline extends Component {
             clonedPathPoint.y -= minY;
 
             modifiedPathPoints.add(clonedPathPoint);
-            clonedPathPoint.getCoordinate(coordinates.get(i), left + actualLeft(onePartWidth), top + actualTop(onePartHeight), onePartWidth, onePartHeight);
+            clonedPathPoint.getCoordinate(coordinates.get(i), left + actualLeft(zoomLevel), top + actualTop(zoomLevel), zoomLevel);
         }
     }
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        Path path = getPath(left, top, onePartWidth, onePartHeight);
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
+        Path path = getPath(left, top, zoomLevel);
         if (!TextUtils.isEmpty(fillColor)) {
             paint.setColor(Color.parseColor(fillColor));
             paint.setStyle(Paint.Style.FILL);

@@ -90,7 +90,7 @@ public class Polygon extends Component {
     }
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
         if (!isValidPoints) {
             if (points.size() >= 3) {
                 Point first = points.get(0);
@@ -109,7 +109,7 @@ public class Polygon extends Component {
         }
         for (int i = 0; i < points.size(); i++) {
             Point point = points.get(i);
-            point.getCoordinate(coordinates.get(i), left + actualLeft(onePartWidth), top + actualTop(onePartHeight), onePartWidth, onePartHeight);
+            point.getCoordinate(coordinates.get(i), left + actualLeft(zoomLevel), top + actualTop(zoomLevel), zoomLevel);
         }
         com.vividsolutions.jts.geom.Polygon polygon = gf.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
         return polygon;
@@ -118,8 +118,8 @@ public class Polygon extends Component {
     private boolean isValidPoints = false;
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        Path path = getPath(left, top, onePartWidth, onePartHeight);
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
+        Path path = getPath(left, top, zoomLevel);
         if (!TextUtils.isEmpty(fillColor)) {
             try {
                 paint.setColor(Color.parseColor(fillColor));

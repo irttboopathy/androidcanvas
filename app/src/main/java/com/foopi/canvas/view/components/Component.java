@@ -61,24 +61,21 @@ public abstract class Component implements Cloneable {
         this.controls = controls;
     }
 
-    public abstract Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight);
+    public abstract Geometry getGeometry(float left, float top, double zoomLevel);
 
-    protected float actualLeft(double onePartWidth) {
-        return actualX(left, onePartWidth);
+    protected float actualLeft(double zoomLevel) {
+        return actualCoordinateValue(left, zoomLevel);
     }
-    protected float actualTop(double onePartHeight) {
-        return actualY(top, onePartHeight);
+    protected float actualTop(double zoomLevel) {
+        return actualCoordinateValue(top, zoomLevel);
     }
-    protected float actualX(float x, double onePartWidth) {
-        return (float) (x * onePartWidth);
-    }
-    protected float actualY(float y, double onePartHeight) {
-        return (float) (y * onePartHeight);
+    protected float actualCoordinateValue(float x, double zoomLevel) {
+        return (float) (x * zoomLevel);
     }
 
-    public Path getPath(float left, float top, double onePartWidth, double onePartHeight) {
+    public Path getPath(float left, float top, double zoomLevel) {
         path.reset();
-        Geometry geometry = getGeometry(left, top, onePartWidth, onePartHeight);
+        Geometry geometry = getGeometry(left, top, zoomLevel);
         Coordinate[] coordinates = geometry.getCoordinates();
         for (int i = 0; i < coordinates.length; i++) {
             Coordinate coordinate = coordinates[i];
@@ -92,10 +89,10 @@ public abstract class Component implements Cloneable {
         return path;
     }
 
-    public abstract void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint);
+    public abstract void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint);
 
-    public final boolean isBounded(double onePartWidth, double onePartHeight, float x, float y) {
-        Geometry geometry = getGeometry(left, top, onePartWidth, onePartHeight);
+    public final boolean isBounded(float zoomLevel, double x, double y) {
+        Geometry geometry = getGeometry(left, top, zoomLevel);
         Point point = gf.createPoint(new Coordinate(x, y));
         return geometry.contains(point);
     }

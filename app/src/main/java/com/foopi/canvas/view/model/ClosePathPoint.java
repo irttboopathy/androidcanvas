@@ -13,7 +13,7 @@ public class ClosePathPoint extends PathPoint {
     }
 
     @Override
-    public void updatePath(Path path, double left, double top, double onePartWidth, double onePartHeight) {
+    public void updatePath(Path path, double left, double top, double zoomLevel) {
         path.close();
     }
 

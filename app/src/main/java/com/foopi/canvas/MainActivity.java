@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         List<Component> components = new ArrayList<>();
 
-        canvasView.setTotalPartWidth(300, 250);
+//        canvasView.setTotalPartWidth(300, 250);
 
 //        Circle c = new Circle();
 //        c.setTop(100);

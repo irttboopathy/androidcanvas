@@ -8,7 +8,7 @@ public abstract class PathPoint extends Point {
         super(x, y);
     }
 
-    public abstract void updatePath(Path path, double left, double top, double onePartWidth, double onePartHeight);
+    public abstract void updatePath(Path path, double left, double top, double zoomLevel);
 
     public abstract PathPoint clonePathPoint();
 

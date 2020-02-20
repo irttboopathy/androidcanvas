@@ -95,13 +95,13 @@ public class Path extends Component {
     }
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
-        updateCoordinates(left, top, onePartWidth, onePartHeight);
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
+        updateCoordinates(left, top, zoomLevel);
 //        gf.
         return null;
     }
 
-    private void updateCoordinates(float left, float top, double onePartWidth, double onePartHeight) {
+    private void updateCoordinates(float left, float top, double zoomLevel) {
         if (validated) {
             return;
         }
@@ -122,25 +122,25 @@ public class Path extends Component {
             clonedPathPoint.adjustPoints(p);
 
             modifiedPathPoints.add(clonedPathPoint);
-            clonedPathPoint.getCoordinate(coordinates.get(i), left + actualLeft(onePartWidth), top + actualTop(onePartHeight), onePartWidth, onePartHeight);
+            clonedPathPoint.getCoordinate(coordinates.get(i), left + actualLeft(zoomLevel), top + actualTop(zoomLevel), zoomLevel);
         }
     }
 
     @Override
-    public android.graphics.Path getPath(float left, float top, double onePartWidth, double onePartHeight) {
-        updateCoordinates(left, top, onePartWidth, onePartHeight);
+    public android.graphics.Path getPath(float left, float top, double zoomLevel) {
+        updateCoordinates(left, top, zoomLevel);
 
         this.path.reset();
         for (int i = 0; i < modifiedPathPoints.size(); i++) {
             PathPoint pathPoint = modifiedPathPoints.get(i);
-            pathPoint.updatePath(path, left + actualLeft(onePartWidth), top + actualTop(onePartHeight), onePartWidth, onePartHeight);
+            pathPoint.updatePath(path, left + actualLeft(zoomLevel), top + actualTop(zoomLevel), zoomLevel);
         }
         return path;
     }
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        android.graphics.Path path = getPath(left, top, onePartWidth, onePartHeight);
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
+        android.graphics.Path path = getPath(left, top, zoomLevel);
 
         if (!TextUtils.isEmpty(fillColor)) {
             try {

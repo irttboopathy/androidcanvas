@@ -63,41 +63,41 @@ public class Text extends Component {
     private Coordinate[] coordinates = {topLeftCoordinate, topRightCoordinate, bottomRightCoordinate, bottomLeftCoordinate, topLeftCoordinate};
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
         myPaint.setColor(Color.parseColor(fillColor));
-        myPaint.setTextSize((float) (textSize * (onePartWidth + onePartHeight) / 2));
+        myPaint.setTextSize((float) (textSize * (zoomLevel)));
         myPaint.setStyle(Paint.Style.FILL);
         myPaint.getTextBounds(text, 0, text.length(), bounds);
 
-        topLeftCoordinate.x = left + actualLeft(onePartWidth) - padding;
-        topLeftCoordinate.y = top + actualTop(onePartHeight) - padding;
+        topLeftCoordinate.x = left + actualLeft(zoomLevel) - padding;
+        topLeftCoordinate.y = top + actualTop(zoomLevel) - padding;
 
-        topRightCoordinate.x = left + actualLeft(onePartWidth) + bounds.width() + padding;
-        topRightCoordinate.y = top + actualTop(onePartHeight) - padding;
+        topRightCoordinate.x = left + actualLeft(zoomLevel) + bounds.width() + padding;
+        topRightCoordinate.y = top + actualTop(zoomLevel) - padding;
 
-        bottomLeftCoordinate.x = left + actualLeft(onePartWidth) - padding;
-        bottomLeftCoordinate.y = top + actualTop(onePartHeight) + bounds.height() + padding;
+        bottomLeftCoordinate.x = left + actualLeft(zoomLevel) - padding;
+        bottomLeftCoordinate.y = top + actualTop(zoomLevel) + bounds.height() + padding;
 
-        bottomRightCoordinate.x = left + actualLeft(onePartWidth) + bounds.width() + padding;
-        bottomRightCoordinate.y = top + actualTop(onePartHeight) + bounds.height() + padding;
+        bottomRightCoordinate.x = left + actualLeft(zoomLevel) + bounds.width() + padding;
+        bottomRightCoordinate.y = top + actualTop(zoomLevel) + bounds.height() + padding;
 
         Polygon polygon = gf.createPolygon(coordinates);
         return polygon;
     }
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
         if (!TextUtils.isEmpty(backgroundColor)) {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.parseColor(backgroundColor));
-            Path path = getPath(left, top, onePartWidth, onePartHeight);
+            Path path = getPath(left, top, zoomLevel);
             canvas.drawPath(path, paint);
         }
 
         paint.setColor(Color.parseColor(fillColor));
-        paint.setTextSize((float) (textSize * (onePartWidth + onePartHeight) / 2));
+        paint.setTextSize((float) (textSize * (zoomLevel)));
         paint.setStyle(Paint.Style.FILL);
         paint.getTextBounds(text, 0, text.length(), bounds);
-        canvas.drawText(text, actualLeft(onePartWidth), actualTop(onePartHeight) + bounds.height(), paint);
+        canvas.drawText(text, actualLeft(zoomLevel), actualTop(zoomLevel) + bounds.height(), paint);
     }
 }

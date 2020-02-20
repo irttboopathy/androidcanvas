@@ -131,33 +131,33 @@ public class Rectangle extends Component {
     private Coordinate[] coordinates = {topLeftCoordinate, topRightCoordinate, bottomRightCoordinate, bottomLeftCoordinate, topLeftCoordinate};
 
     @Override
-    public Geometry getGeometry(float left, float top, double onePartWidth, double onePartHeight) {
-        topLeftCoordinate.x = left + actualLeft(onePartWidth);
-        topLeftCoordinate.y = top + actualTop(onePartHeight);
+    public Geometry getGeometry(float left, float top, double zoomLevel) {
+        topLeftCoordinate.x = left + actualLeft(zoomLevel);
+        topLeftCoordinate.y = top + actualTop(zoomLevel);
 
-        topRightCoordinate.x = left + actualRight(onePartWidth);
-        topRightCoordinate.y = top + actualTop(onePartHeight);
+        topRightCoordinate.x = left + actualRight(zoomLevel);
+        topRightCoordinate.y = top + actualTop(zoomLevel);
 
-        bottomLeftCoordinate.x = left + actualLeft(onePartWidth);
-        bottomLeftCoordinate.y = top + actualBottom(onePartHeight);
+        bottomLeftCoordinate.x = left + actualLeft(zoomLevel);
+        bottomLeftCoordinate.y = top + actualBottom(zoomLevel);
 
-        bottomRightCoordinate.x = left + actualRight(onePartWidth);
-        bottomRightCoordinate.y = top + actualBottom(onePartHeight);
+        bottomRightCoordinate.x = left + actualRight(zoomLevel);
+        bottomRightCoordinate.y = top + actualBottom(zoomLevel);
 
         Polygon polygon = gf.createPolygon(coordinates);
 
         AffineTransformation at = new AffineTransformation();
-        at.setToRotation(angle * Math.PI / 180, actualLeft(onePartWidth), actualTop(onePartHeight));
-        at.translate(-actualLeft(onePartWidth), -actualTop(onePartHeight));
+        at.setToRotation(angle * Math.PI / 180, actualLeft(zoomLevel), actualTop(zoomLevel));
+        at.translate(-actualLeft(zoomLevel), -actualTop(zoomLevel));
         at.scale(scaleX, scaleY);
-        at.translate(actualLeft(onePartWidth), actualTop(onePartHeight));
+        at.translate(actualLeft(zoomLevel), actualTop(zoomLevel));
         polygon = (Polygon) at.transform(polygon);
         return polygon;
     }
 
     @Override
-    public void draw(float left, float top, double onePartWidth, double onePartHeight, Canvas canvas, Paint paint) {
-        Path path = getPath(left, top, onePartWidth, onePartHeight);
+    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
+        Path path = getPath(left, top, zoomLevel);
         if (!TextUtils.isEmpty(fillColor)) {
             try {
                 paint.setColor(Color.parseColor(fillColor));
