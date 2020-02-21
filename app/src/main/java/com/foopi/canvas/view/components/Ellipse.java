@@ -1,11 +1,5 @@
 package com.foopi.canvas.view.components;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.text.TextUtils;
-
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
@@ -17,11 +11,6 @@ public class Ellipse extends Component {
     private float height;
     private float rx;
     private float ry;
-
-    private String fillColor;
-    private String strokeColor;
-    private float strokeWidth = 2f;
-    private float opacity = 1;
 
     public float getWidth() {
         return width;
@@ -55,42 +44,6 @@ public class Ellipse extends Component {
         this.ry = ry;
     }
 
-    public String getFillColor() {
-        return fillColor;
-    }
-
-    public void setFillColor(String fillColor) {
-        if (fillColor.startsWith("rgba")) {
-//            Color.ar
-            this.fillColor = "#ff0000";
-        }
-        this.fillColor = fillColor;
-    }
-
-    public String getStrokeColor() {
-        return strokeColor;
-    }
-
-    public void setStrokeColor(String strokeColor) {
-        this.strokeColor = strokeColor;
-    }
-
-    public float getStrokeWidth() {
-        return strokeWidth;
-    }
-
-    public void setStrokeWidth(float strokeWidth) {
-        this.strokeWidth = strokeWidth;
-    }
-
-    public float getOpacity() {
-        return opacity;
-    }
-
-    public void setOpacity(float opacity) {
-        this.opacity = opacity;
-    }
-
     @Override
     public Geometry getGeometry(float left, float top, double zoomLevel) {
         Coordinate pointCoordinate = new Coordinate();
@@ -98,55 +51,11 @@ public class Ellipse extends Component {
         pointCoordinate.y = top + actualTop(zoomLevel);
 
         GeometricShapeFactory factory = new GeometricShapeFactory();
-        factory.setCentre(new Coordinate(left + actualLeft(zoomLevel), top + actualTop(zoomLevel)));
-        factory.setWidth(actualCoordinateValue(this.rx, zoomLevel));
-        factory.setHeight(actualCoordinateValue(this.ry, zoomLevel));
+        factory.setCentre(new Coordinate(left + actualCoordinateValue((this.left + rx), zoomLevel),
+                top + actualCoordinateValue((this.top + ry), zoomLevel)));
+        factory.setWidth(actualCoordinateValue(this.rx * 2, zoomLevel));
+        factory.setHeight(actualCoordinateValue(this.ry * 2, zoomLevel));
         Polygon ellipse = factory.createEllipse();
         return ellipse;
-
-//        LineString lineString = gf.createLineString(new Coordinate[]{
-//                new Coordinate(left + actualCoordinateValue(this.left + this.rx, onePartWidth), top + actualY(this.top + this.rx, onePartHeight)),
-//                new Coordinate(left + actualCoordinateValue(this.left + this.rx, onePartWidth), top + actualY(this.top + this.ry, onePartHeight))
-//        });
-//
-//        float minRadius = rx > ry ? ry : rx;
-//        Geometry circle = lineString.buffer(minRadius * onePartWidth);
-//        return circle;
-//        gf.create
-//        return null;
-    }
-
-//    @Override
-//    public void setTop(float top) {
-//        if (top < 0) {
-//            top = 0;
-//        }
-//        super.setTop(top);
-//    }
-
-    protected float actualLeft(double onePartWidth) {
-        return (float) ((left + rx / 2) * onePartWidth);
-    }
-
-    protected float actualTop(double zoomLevel) {
-        return (float) ((top + ry / 2) * zoomLevel);
-    }
-
-    @Override
-    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
-        Path path = getPath(left, top, zoomLevel);
-        if (!TextUtils.isEmpty(fillColor)) {
-            try {
-                paint.setColor(Color.parseColor(fillColor));
-            } catch (Exception e) {
-                paint.setColor(Color.RED);
-            }
-            paint.setStyle(Paint.Style.FILL);
-            paint.setAlpha((int) (255 * opacity));
-            canvas.drawPath(path, paint);
-//            canvas.drawOval(left + actualLeft(onePartWidth), top + actualTop(onePartWidth),
-//                    actualCoordinateValue(this.left + this.left + rx, onePartWidth) + left,
-//                    actualY(this.top + this.top + ry, onePartHeight) + top, paint);
-        }
     }
 }

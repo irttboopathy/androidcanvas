@@ -47,4 +47,22 @@ public class Point {
         }
         return equals;
     }
+
+    public void getMin(Point point) {
+        if (x < point.x) {
+            point.x = x;
+        }
+        if (y < point.y) {
+            point.y = y;
+        }
+    }
+
+    public void adjustPoints(Point point) {
+        x -= point.x;
+        y -= point.y;
+    }
+
+    public Point clonePoint() {
+        return new Point(this);
+    }
 }

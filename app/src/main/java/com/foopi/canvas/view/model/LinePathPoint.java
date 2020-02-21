@@ -18,7 +18,7 @@ public class LinePathPoint extends PathPoint {
     }
 
     @Override
-    public PathPoint clonePathPoint() {
+    public PathPoint clonePoint() {
         return new LinePathPoint(this);
     }
 }

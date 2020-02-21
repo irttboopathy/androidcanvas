@@ -16,7 +16,6 @@ public class Text extends Component {
     private String text;
     private float textSize = 12;
 
-    private String fillColor = "#000000";
     private String backgroundColor;
 
     public String getText() {
@@ -25,14 +24,6 @@ public class Text extends Component {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public String getFillColor() {
-        return fillColor;
-    }
-
-    public void setFillColor(String fillColor) {
-        this.fillColor = fillColor;
     }
 
     public float getTextSize() {

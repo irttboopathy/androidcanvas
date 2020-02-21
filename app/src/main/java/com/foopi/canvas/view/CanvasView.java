@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -12,6 +13,9 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.foopi.canvas.view.components.Component;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ public class CanvasView extends View {
     private double widthPercentage;
     private double heightPercentage;
     private float zoomLevel = 1.0f;
+    private Component highlight;
 
     public CanvasView(Context context) {
         super(context);
@@ -107,8 +112,39 @@ public class CanvasView extends View {
             for (Component component : components) {
                 component.draw(left, top, zoomLevel, canvas, paint);
             }
+
+            if (highlight != null) {
+                Geometry geometry = highlight.createGeometry(left, top, zoomLevel);
+                Path path = new Path();
+                if (geometry instanceof GeometryCollection) {
+                    GeometryCollection collection = (GeometryCollection) geometry;
+                    for (int i = 0; i < collection.getNumGeometries(); i++) {
+                        Geometry geometryN = collection.getGeometryN(i);
+                        updatePath(geometryN, path);
+                    }
+                }
+                else {
+                    updatePath(geometry, path);
+                }
+                paint.setColor(Color.RED);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setStrokeWidth(5.0f);
+                canvas.drawPath(path, paint);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void updatePath(Geometry geometry, Path path) {
+        Coordinate[] coordinates = geometry.getCoordinates();
+        for (int i = 0; i < coordinates.length; i++) {
+            Coordinate coordinate = coordinates[i];
+            if (i == 0) {
+                path.moveTo((float) coordinate.x, (float) coordinate.y);
+            } else {
+                path.lineTo((float) coordinate.x, (float) coordinate.y);
+            }
         }
     }
 
@@ -120,6 +156,15 @@ public class CanvasView extends View {
             for (int i = components.size() - 1; i >= 0; i--) {
                 Component component = components.get(i);
                 if (component.isVisible() && component.isControls()) {
+                    highlight = component;
+                    invalidate();
+                    postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            highlight = null;
+                            invalidate();
+                        }
+                    }, 5000);
                     boolean bounded = component.isBounded(zoomLevel, x, y);
                     if (bounded) {
                         if (onComponentClickListener != null) {

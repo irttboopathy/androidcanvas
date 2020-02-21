@@ -26,7 +26,7 @@ public class CubicPathPoint extends PathPoint {
     }
 
     @Override
-    public PathPoint clonePathPoint() {
+    public PathPoint clonePoint() {
         return new CubicPathPoint(this);
     }
 

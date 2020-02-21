@@ -10,8 +10,8 @@ import com.vividsolutions.jts.geom.Geometry;
 public class Image extends Component {
 
     private Bitmap bitmap;
-    private float scaleX;
-    private float scaleY;
+//    private float scaleX;
+//    private float scaleY;
 
     public Bitmap getBitmap() {
         return bitmap;
@@ -21,31 +21,15 @@ public class Image extends Component {
         this.bitmap = bitmap;
     }
 
-    public float getScaleX() {
-        return scaleX;
-    }
-
-    public void setScaleX(float scaleX) {
-        this.scaleX = scaleX;
-    }
-
-    public float getScaleY() {
-        return scaleY;
-    }
-
-    public void setScaleY(float scaleY) {
-        this.scaleY = scaleY;
-    }
-
     @Override
     public Geometry getGeometry(float left, float top, double zoomLevel) {
         return null;
     }
 
-    @Override
-    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
-        Matrix matrix = new Matrix();
-        matrix.setScale(scaleX, scaleY, actualLeft(zoomLevel), actualTop(zoomLevel));
-        canvas.drawBitmap(bitmap, matrix, paint);
-    }
+//    @Override
+//    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
+//        Matrix matrix = new Matrix();
+//        matrix.setScale(scaleX, scaleY, actualLeft(zoomLevel), actualTop(zoomLevel));
+//        canvas.drawBitmap(bitmap, matrix, paint);
+//    }
 }

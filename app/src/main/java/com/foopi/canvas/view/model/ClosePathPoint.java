@@ -18,7 +18,7 @@ public class ClosePathPoint extends PathPoint {
     }
 
     @Override
-    public PathPoint clonePathPoint() {
+    public PathPoint clonePoint() {
         return new ClosePathPoint();
     }
 

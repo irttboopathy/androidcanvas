@@ -18,7 +18,7 @@ public class MovePathPoint extends PathPoint {
     }
 
     @Override
-    public PathPoint clonePathPoint() {
+    public PathPoint clonePoint() {
         return new MovePathPoint(this);
     }
 }
