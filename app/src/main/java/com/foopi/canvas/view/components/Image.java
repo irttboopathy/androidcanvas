@@ -21,10 +21,16 @@ public class Image extends Component {
         this.bitmap = bitmap;
     }
 
+//    @Override
+//    public Geometry getGeometry(float left, float top, double zoomLevel) {
+//        return null;
+//    }
+
     @Override
-    public Geometry getGeometry(float left, float top, double zoomLevel) {
+    public GeomProperty getGeomProperty(float left, float top, double zoomLevel) {
         return null;
     }
+
 
 //    @Override
 //    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {

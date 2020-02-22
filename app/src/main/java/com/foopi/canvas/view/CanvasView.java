@@ -114,22 +114,22 @@ public class CanvasView extends View {
             }
 
             if (highlight != null) {
-                Geometry geometry = highlight.createGeometry(left, top, zoomLevel);
-                Path path = new Path();
-                if (geometry instanceof GeometryCollection) {
-                    GeometryCollection collection = (GeometryCollection) geometry;
-                    for (int i = 0; i < collection.getNumGeometries(); i++) {
-                        Geometry geometryN = collection.getGeometryN(i);
-                        updatePath(geometryN, path);
-                    }
-                }
-                else {
-                    updatePath(geometry, path);
-                }
-                paint.setColor(Color.RED);
-                paint.setStyle(Paint.Style.STROKE);
-                paint.setStrokeWidth(5.0f);
-                canvas.drawPath(path, paint);
+//                Geometry geometry = highlight.createGeometry(left, top, zoomLevel);
+//                Path path = new Path();
+//                if (geometry instanceof GeometryCollection) {
+//                    GeometryCollection collection = (GeometryCollection) geometry;
+//                    for (int i = 0; i < collection.getNumGeometries(); i++) {
+//                        Geometry geometryN = collection.getGeometryN(i);
+//                        updatePath(geometryN, path);
+//                    }
+//                }
+//                else {
+//                    updatePath(geometry, path);
+//                }
+//                paint.setColor(Color.RED);
+//                paint.setStyle(Paint.Style.STROKE);
+//                paint.setStrokeWidth(5.0f);
+//                canvas.drawPath(path, paint);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

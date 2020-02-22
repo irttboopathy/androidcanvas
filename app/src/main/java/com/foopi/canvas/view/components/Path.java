@@ -1,6 +1,7 @@
 package com.foopi.canvas.view.components;
 
 import android.graphics.Matrix;
+import android.util.Log;
 
 import com.foopi.canvas.view.model.ClosePathPoint;
 import com.foopi.canvas.view.model.CubicPathPoint;
@@ -23,7 +24,7 @@ import java.util.List;
 public class Path extends PointComponent {
 
     @Override
-    public Geometry getGeometry(float left, float top, double zoomLevel) {
+    public GeomProperty getGeomProperty(float left, float top, double zoomLevel) {
         updatePoints();
 
         List<Geometry> geometries = new ArrayList<>();
@@ -55,8 +56,7 @@ public class Path extends PointComponent {
         }
         GeometryCollection gc = new GeometryCollection(geometries.toArray(new Geometry[geometries.size()]), gf);
         Geometry union = gc.union();
-
-        return union;
+        return new GeomProperty(union, getProperty());
     }
 
     @Override
@@ -69,7 +69,11 @@ public class Path extends PointComponent {
             pathPoint.updatePath(path, left + actualLeft(zoomLevel), top + actualTop(zoomLevel), zoomLevel);
         }
         Matrix matrix = new Matrix();
+        if (angle != 0) {
+            Log.e(getClass().toString(), "Hi");
+        }
         matrix.setRotate((float) angle, left + actualLeft(zoomLevel), top + actualTop(zoomLevel));
+        matrix.setScale((float) scaleX, (float) scaleY, left + actualLeft(zoomLevel), top + actualTop(zoomLevel));
         path.transform(matrix);
         return path;
     }

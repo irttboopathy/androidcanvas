@@ -4,6 +4,9 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Circle extends Component {
 
     private float radius;
@@ -19,12 +22,12 @@ public class Circle extends Component {
     private Coordinate pointCoordinate = new Coordinate();
 
     @Override
-    public Geometry getGeometry(float left, float top, double zoomLevel) {
+    public GeomProperty getGeomProperty(float left, float top, double zoomLevel) {
         pointCoordinate.x = left +  actualCoordinateValue((this.left + this.radius), zoomLevel);
         pointCoordinate.y = top + actualCoordinateValue((this.top + this.radius), zoomLevel);
 
         Point point = gf.createPoint(pointCoordinate);
-        Geometry circle = point.buffer(radius * zoomLevel);
-        return circle;
+        Geometry geometry = point.buffer(radius * zoomLevel);
+        return new GeomProperty(geometry, getProperty());
     }
 }

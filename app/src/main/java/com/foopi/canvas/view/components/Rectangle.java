@@ -2,10 +2,12 @@ package com.foopi.canvas.view.components;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Polygon;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Rectangle extends Component {
 
@@ -39,9 +41,9 @@ public class Rectangle extends Component {
         width = (float) (param.getDouble("width"));
         height = (float) (param.getDouble("height"));
 
-        fillColor = param.optString("fill");
-        strokeColor = param.optString("stroke");
-        strokeWidth = (float) param.optDouble("strokeWidth", 1f);
+        setFillColor(param.optString("fill"));
+        setStrokeColor(param.optString("stroke"));
+        setStrokeWidth((float) param.optDouble("strokeWidth", 1f));
 
         controls = param.optBoolean("controls", false);
     }
@@ -60,7 +62,7 @@ public class Rectangle extends Component {
     private Coordinate[] coordinates = {topLeftCoordinate, topRightCoordinate, bottomRightCoordinate, bottomLeftCoordinate, topLeftCoordinate};
 
     @Override
-    public Geometry getGeometry(float left, float top, double zoomLevel) {
+    public GeomProperty getGeomProperty(float left, float top, double zoomLevel) {
         topLeftCoordinate.x = left + actualLeft(zoomLevel);
         topLeftCoordinate.y = top + actualTop(zoomLevel);
 
@@ -73,8 +75,9 @@ public class Rectangle extends Component {
         bottomRightCoordinate.x = left + actualRight(zoomLevel);
         bottomRightCoordinate.y = top + actualBottom(zoomLevel);
 
-        Polygon polygon = gf.createPolygon(coordinates);
-        return polygon;
+        Geometry polygon = gf.createPolygon(coordinates);
+        GeomProperty geomProperty = new GeomProperty(polygon, getProperty());
+        return geomProperty;
     }
 
 }

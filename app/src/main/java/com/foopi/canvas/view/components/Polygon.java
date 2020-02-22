@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class Polygon extends PointComponent {
 
     @Override
-    public Geometry getGeometry(float left, float top, double zoomLevel) {
+    public GeomProperty getGeomProperty(float left, float top, double zoomLevel) {
         if (!validated) {
             if (getPoints().size() >= 3) {
                 Point first = getPoints().get(0);
@@ -32,7 +32,7 @@ public class Polygon extends PointComponent {
             point.getCoordinate(coordinates.get(i), left + actualLeft(zoomLevel), top + actualTop(zoomLevel), zoomLevel);
         }
         com.vividsolutions.jts.geom.Polygon polygon = gf.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
-        return polygon;
+        return new GeomProperty(polygon, getProperty());
     }
 
     public void setPoints(JSONArray p1Array) throws JSONException {

@@ -19,15 +19,15 @@ public class Polyline extends PointComponent {
     }
 
     @Override
-    public Geometry getGeometry(float left, float top, double zoomLevel) {
+    public GeomProperty getGeomProperty(float left, float top, double zoomLevel) {
         updatePoints();
         this.path.reset();
         for (int i = 0; i < modifiedPoints.size(); i++) {
             Point pathPoint = modifiedPoints.get(i);
             pathPoint.getCoordinate(coordinates.get(i),left + actualLeft(zoomLevel), top + actualTop(zoomLevel), zoomLevel);
         }
-        at.setToRotation(angle * Math.PI / 180, actualLeft(zoomLevel), actualTop(zoomLevel));
+//        at.setToRotation(angle * Math.PI / 180, actualLeft(zoomLevel), actualTop(zoomLevel));
         LineString lineString = gf.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
-        return lineString;
+        return new GeomProperty(lineString, getProperty());
     }
 }

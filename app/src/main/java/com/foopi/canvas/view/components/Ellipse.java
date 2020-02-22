@@ -45,7 +45,7 @@ public class Ellipse extends Component {
     }
 
     @Override
-    public Geometry getGeometry(float left, float top, double zoomLevel) {
+    public GeomProperty getGeomProperty(float left, float top, double zoomLevel) {
         Coordinate pointCoordinate = new Coordinate();
         pointCoordinate.x = left +  actualLeft(zoomLevel);
         pointCoordinate.y = top + actualTop(zoomLevel);
@@ -56,6 +56,6 @@ public class Ellipse extends Component {
         factory.setWidth(actualCoordinateValue(this.rx * 2, zoomLevel));
         factory.setHeight(actualCoordinateValue(this.ry * 2, zoomLevel));
         Polygon ellipse = factory.createEllipse();
-        return ellipse;
+        return new GeomProperty(ellipse, getProperty());
     }
 }

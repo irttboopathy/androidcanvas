@@ -54,8 +54,8 @@ public class Text extends Component {
     private Coordinate[] coordinates = {topLeftCoordinate, topRightCoordinate, bottomRightCoordinate, bottomLeftCoordinate, topLeftCoordinate};
 
     @Override
-    public Geometry getGeometry(float left, float top, double zoomLevel) {
-        myPaint.setColor(Color.parseColor(fillColor));
+    public GeomProperty getGeomProperty(float left, float top, double zoomLevel) {
+        myPaint.setColor(Color.parseColor(getFillColor()));
         myPaint.setTextSize((float) (textSize * (zoomLevel)));
         myPaint.setStyle(Paint.Style.FILL);
         myPaint.getTextBounds(text, 0, text.length(), bounds);
@@ -73,7 +73,7 @@ public class Text extends Component {
         bottomRightCoordinate.y = top + actualTop(zoomLevel) + bounds.height() + padding;
 
         Polygon polygon = gf.createPolygon(coordinates);
-        return polygon;
+        return new GeomProperty(polygon, getProperty());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Text extends Component {
             canvas.drawPath(path, paint);
         }
 
-        paint.setColor(Color.parseColor(fillColor));
+        paint.setColor(Color.parseColor(getFillColor()));
         paint.setTextSize((float) (textSize * (zoomLevel)));
         paint.setStyle(Paint.Style.FILL);
         paint.getTextBounds(text, 0, text.length(), bounds);
