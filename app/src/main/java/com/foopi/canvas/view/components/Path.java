@@ -51,7 +51,7 @@ public class Path extends PointComponent {
             if (!closed) {
                 coordinates.add(new Coordinate(coordinates.get(0)));
             }
-            Polygon polygon = gf.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
+            LineString polygon = gf.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
             geometries.add(polygon);
         }
         GeometryCollection gc = new GeometryCollection(geometries.toArray(new Geometry[geometries.size()]), gf);

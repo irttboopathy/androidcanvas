@@ -102,7 +102,7 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawColor(Color.GRAY);
+//        canvas.drawColor(Color.GRAY);
 
 //        onePartWidth = getMeasuredWidth() / totalPartWidth;
 //        onePartHeight = getMeasuredHeight() / totalPartHeight;

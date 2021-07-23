@@ -12,6 +12,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.util.AffineTransformation;
 
 import java.util.HashMap;
@@ -137,6 +138,7 @@ public abstract class Component implements Cloneable {
 
         AffineTransformation at = new AffineTransformation();
 
+        Point centroid = geometryProperty.geometry.getCentroid();
         at.setToRotation(angle * Math.PI / 180, left + actualLeft(zoomLevel), top + actualTop(zoomLevel));
         at.translate(-actualLeft(zoomLevel), -actualTop(zoomLevel));
         at.scale(scaleX, scaleY);
@@ -245,9 +247,7 @@ public abstract class Component implements Cloneable {
     }
 
     public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
-//        Path path = getPath(left, top, zoomLevel);
         GeomProperty geometryProperty = createGeometry(left, top, zoomLevel);
-//        for (GeomProperty geometryProperty : geometries) {
             Path path = null;
             if (geometryProperty instanceof GeomCollProperty) {
                 GeomCollProperty geomCollProperty = (GeomCollProperty) geometryProperty;

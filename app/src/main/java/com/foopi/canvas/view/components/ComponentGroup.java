@@ -3,6 +3,7 @@ package com.foopi.canvas.view.components;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.foopi.canvas.view.model.Point;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 
@@ -74,15 +75,18 @@ public class ComponentGroup extends Component {
     private void moveComponentsToNewPosition() {
         positionedComponents.clear();
         try {
+            float minX = Integer.MAX_VALUE;
+            float minY = Integer.MAX_VALUE;
+            Point p = new Point(minX, minY);
+
+            for (Component component : components) {
+                new Point(component.getLeft(), component.getTop()).getMin(p);
+            }
+
             for (Component component : components) {
                 Component clone = (Component) component.clone();
-                clone.setLeft((component.getLeft() + left));
-                clone.setTop((component.getTop() + top));
-//                clone.setLeft((float) ((component.getLeft() + left) * scaleX));
-//                clone.setTop((float) ((component.getTop() + top) * scaleY));
-//                clone.setScaleX(scaleX);
-//                clone.setScaleY(scaleY);
-//                clone.setAngle(angle);
+                clone.setLeft((component.getLeft() + left - p.x));
+                clone.setTop((component.getTop() + top - p.y));
                 positionedComponents.add(clone);
             }
         } catch (Exception ex) {}
@@ -91,11 +95,7 @@ public class ComponentGroup extends Component {
 
 //    @Override
 //    public void draw(float left, float top, float zoomLevel, Canvas canvas, Paint paint) {
-//        if (!movedComponentsToNewPosition) {
-//            moveComponentsToNewPosition();
-//        }
-//        for (Component component : positionedComponents) {
-//            component.draw(left, top, zoomLevel, canvas, paint);
-//        }
+//        GeomCollProperty geometryProperty = (GeomCollProperty) createGeometry(left, top, zoomLevel);
+//
 //    }
 }

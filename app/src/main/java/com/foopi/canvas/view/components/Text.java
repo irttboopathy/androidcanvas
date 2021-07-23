@@ -86,9 +86,14 @@ public class Text extends Component {
         }
 
         paint.setColor(Color.parseColor(getFillColor()));
-        paint.setTextSize((float) (textSize * (zoomLevel)));
+        paint.setTextSize((float) (textSize * (zoomLevel))  );
         paint.setStyle(Paint.Style.FILL);
         paint.getTextBounds(text, 0, text.length(), bounds);
-        canvas.drawText(text, actualLeft(zoomLevel), actualTop(zoomLevel) + bounds.height(), paint);
+
+        float posX = bounds.left; // (canvas.getWidth() - bounds.width()) / 2; // center
+        float posY = bounds.top; // ((canvas.getHeight() - bounds.height()) / 2); // center
+        canvas.scale((float) scaleX, (float) scaleY, posX, posY);
+        canvas.drawText(text, left + actualLeft(zoomLevel), top + actualTop(zoomLevel) + bounds.height(), paint);
+        canvas.scale((float) (1 / scaleX), (float) (1 / scaleY), posX, posY);
     }
 }
